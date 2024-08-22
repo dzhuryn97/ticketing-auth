@@ -1,0 +1,4 @@
+common:
+    event_bus:
+        exchange_name: 'auth'
+        queues_name: 'auth'
