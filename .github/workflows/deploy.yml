@@ -16,7 +16,7 @@ jobs:
                 with:
                     version: "lab:latest"
                     driver: cloud
-                    endpoint: "dzhuryn/default"
+                    endpoint: "dzhuryn/cloud-builder"
                     install: true
             -   name: Build and push
                 uses: docker/build-push-action@v6
