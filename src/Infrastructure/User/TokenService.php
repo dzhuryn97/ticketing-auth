@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\User;
 
-use App\Application\User\Service\TokenEncoder;
+use App\Application\User\TokenEncoder;
 use Lexik\Bundle\JWTAuthenticationBundle\Encoder\JWTEncoderInterface;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 

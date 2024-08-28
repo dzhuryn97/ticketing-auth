@@ -10,6 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
 use Ramsey\Uuid\Rfc4122\UuidV4;
 use Ramsey\Uuid\UuidInterface;
 use Ticketing\Common\Domain\DomainEntity;
+use Ticketing\Common\Domain\Support\CollectionHelpers;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\Table(name: '`user`')]
@@ -36,10 +37,10 @@ class User extends DomainEntity
     private Collection $roles;
 
     public function __construct(
-        string         $name,
-        string          $email,
+        string $name,
+        string $email,
         string $password,
-        array          $roles
+        array  $roles
     )
     {
         $this->id = UuidV4::uuid4();
@@ -53,17 +54,31 @@ class User extends DomainEntity
     }
 
     public function update(
-        string          $name,
-        string           $email,
+        string  $name,
+        string  $email,
         ?string $password,
-        array           $roles
+        ?array  $roles = null
     ): void
     {
+
+        if (
+            $name === $this->name &&
+            $email === $this->email &&
+            ($roles === null || $this->isRoleEquals($roles)) &&
+            $password === null
+        ) {
+            return;
+        }
+
+
         $this->name = $name;
         $this->email = $email;
-        $this->roles->clear();
-        foreach ($roles as $role) {
-            $this->addRole($role);
+
+        if($roles && !$this->isRoleEquals($roles)){
+            $this->roles->clear();
+            foreach ($roles as $role) {
+                $this->addRole($role);
+            }
         }
 
         if ($password) {
@@ -93,16 +108,21 @@ class User extends DomainEntity
         return $this->password;
     }
 
-    public function getRoles(): array
+    public function getPermissions(): array
     {
         $permissions = [
             'ROLE_USER'
         ];
-        foreach($this->roles as $role){
+        foreach ($this->roles as $role) {
             $permissions = array_merge($role->getPermission(), $permissions);
         }
 
         return $permissions;
+    }
+
+    public function getRoles()
+    {
+        return $this->roles;
     }
 
 
@@ -123,5 +143,12 @@ class User extends DomainEntity
     private function hasRole(Role $role): bool
     {
         return $this->roles->contains($role);
+    }
+
+    private function isRoleEquals(array $inputRoles): bool
+    {
+        return CollectionHelpers::isCollectionsEqual(new ArrayCollection($inputRoles), $this->roles, function (Role $role1, Role $role2) {
+            return $role1->getId()->equals($role2->getId());
+        });
     }
 }

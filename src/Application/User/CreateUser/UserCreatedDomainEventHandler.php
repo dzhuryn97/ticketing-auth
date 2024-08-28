@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\User\UserCase\CreateUser;
+namespace App\Application\User\CreateUser;
 
 use App\Domain\User\UserCreatedDomainEvent;
 use App\Domain\User\UserRepositoryInterface;

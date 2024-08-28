@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\User\Factory;
+namespace App\Application\User;
 
 use App\Domain\User\User;
 use Ticketing\Common\Application\Security\AuthUserDto;

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Application\User\UserCase\GetCurrentUser;
+namespace App\Application\User\GetCurrentUser;
 
 
+use Ticketing\Common\Application\Query\QueryHandlerInterface;
 use Ticketing\Common\Application\Security\AuthUserDto;
 use Ticketing\Common\Application\Security\Security;
 
-class GetCurrentUserQueryHandler
+class GetCurrentUserQueryHandler implements QueryHandlerInterface
 {
 
     public function __construct(
@@ -15,7 +16,7 @@ class GetCurrentUserQueryHandler
     {
     }
 
-    public function handle():?AuthUserDto
+    public function __invoke(GetCurrentUserQuery $query):?AuthUserDto
     {
         return $this->security->connectedUser();
     }

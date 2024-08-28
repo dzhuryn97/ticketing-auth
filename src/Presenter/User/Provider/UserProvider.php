@@ -2,35 +2,39 @@
 
 namespace App\Presenter\User\Provider;
 
+use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProviderInterface;
-use App\Application\User\UserCase\GetUserById\GetUserByIdQuery;
-use App\Application\User\UserCase\GetUserById\GetUserByIdQueryHandler;
-use App\Domain\User\Exception\UserEntityNotFoundException;
+use App\Application\User\GetUserById\GetUserByIdQuery;
+use App\Application\User\GetUsers\GetUsersQuery;
+use App\Domain\User\User;
 use App\Presenter\User\Resource\UserResource;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Ticketing\Common\Application\Query\QueryBusInterface;
 
 class UserProvider implements ProviderInterface
 {
-    private GetUserByIdQueryHandler $userByIdQueryHandler;
 
     public function __construct(
-        GetUserByIdQueryHandler $getUserByIdQueryHandler
+        private readonly QueryBusInterface $queryBus
     )
     {
-        $this->userByIdQueryHandler = $getUserByIdQueryHandler;
     }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
-        try {
-            $userId = (string)$uriVariables['id'];
-            $userByIdQuery = new GetUserByIdQuery($userId);
-            $user = $this->userByIdQueryHandler->handle($userByIdQuery);
-        } catch (UserEntityNotFoundException $e){
-            throw new NotFoundHttpException();
+        if($operation instanceof Get){
+            $userId = $uriVariables['id'];
+            $user = $this->queryBus->ask(new GetUserByIdQuery($userId));
+
+            return UserResource::fromUser($user);
         }
 
-        return  UserResource::fromUser($user);
+
+        $users = $this->queryBus->ask(new GetUsersQuery());
+
+        return array_map(function (User $user){
+            return  UserResource::fromUser($user);
+
+        },$users);
     }
 }

@@ -2,7 +2,7 @@
 
 namespace App\Domain\User;
 
-use App\Domain\User\Exception\UserEntityNotFoundException;
+use App\Domain\User\Exception\UserNotFoundException;
 use Ramsey\Uuid\UuidInterface;
 
 interface UserRepositoryInterface
@@ -12,8 +12,14 @@ interface UserRepositoryInterface
     public function findUserByEmail(string $email): ?User;
 
     /**
-     * @throws UserEntityNotFoundException
+     * @throws UserNotFoundException
      */
     public function get(UuidInterface $id):User;
     public function findById(UuidInterface $id):?User;
+
+    /**
+     * @return User[]
+     */
+    public function getAll():array;
+
 }

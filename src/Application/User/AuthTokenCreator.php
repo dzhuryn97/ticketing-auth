@@ -1,8 +1,7 @@
 <?php
 
-namespace App\Application\User\Service;
+namespace App\Application\User;
 
-use App\Application\User\Factory\AuthUserFactory;
 use App\Domain\User\User;
 
 class AuthTokenCreator

@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Application\User\UserCase\CreateUser;
+namespace App\Application\User\CreateUser;
 
 use App\Domain\Role\RoleRepositoryInterface;
 use App\Domain\User\Exception\EmailIsUsedException;
 use App\Domain\User\PasswordHasherInterface;
 use App\Domain\User\User;
 use App\Domain\User\UserRepositoryInterface;
+use Ticketing\Common\Application\Command\CommandHandlerInterface;
 use Ticketing\Common\Application\FlusherInterface;
 
-class CreateUserCommandHandler
+class CreateUserCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
@@ -20,7 +21,7 @@ class CreateUserCommandHandler
     {
     }
 
-    public function handle(CreateUserCommand $command)
+    public function __invoke(CreateUserCommand $command)
     {
         $this->ensureEmailIsUnique($command->email);
 
