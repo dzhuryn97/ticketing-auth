@@ -1,0 +1,27 @@
+name: Code Linting and Testing
+on:
+    push:
+        branches:
+            - feature/*
+    pull_request:
+env:
+    TEST_TAG: dzhuryn/ticketing-auth-php:test
+jobs:
+    test:
+        name: Code Linting and Testing
+        runs-on: ubuntu-24.04
+        steps:
+            -   uses: actions/checkout@v4
+            -   name: Setup build
+                uses: ./.github/actions/setup-build
+                with:
+                    docker-user: ${{ secrets.DOCKER_USER }}
+                    docker-password: ${{ secrets.DOCKER_PASSWORD }}
+            -   name: Build and export to Docker
+                uses: docker/build-push-action@v6
+                with:
+                    load: true
+                    tags: ${{ env.TEST_TAG }}
+            -   name: Test
+                run: |
+                    docker run --rm ${{ env.TEST_TAG }} composer run cs-check

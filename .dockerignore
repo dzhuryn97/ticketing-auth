@@ -1,3 +1,5 @@
 .idea
-.igt
+.git
 vendor
+var
+public/bundles

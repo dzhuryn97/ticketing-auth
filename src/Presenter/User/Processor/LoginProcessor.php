@@ -4,22 +4,19 @@ namespace App\Presenter\User\Processor;
 
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
-use App\Application\User\UserCase\Login\LoginUserCommand;
-use App\Application\User\UserCase\Login\LoginUserHandler;
+use App\Application\User\Login\LoginUserCommand;
 use App\Presenter\User\Output\JWT;
 use App\Presenter\User\Payload\Login;
 use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
+use Ticketing\Common\Application\Command\CommandBusInterface;
 use Ticketing\Common\Presenter\Symfony\Security\AuthUser;
 
 class LoginProcessor implements ProcessorInterface
 {
-
-
     public function __construct(
-        private readonly LoginUserHandler $loginHandler,
-        private readonly JWTTokenManagerInterface $JWTManager
-    )
-    {
+        private readonly CommandBusInterface $commandBus,
+        private readonly JWTTokenManagerInterface $JWTManager,
+    ) {
     }
 
     /**
@@ -31,14 +28,12 @@ class LoginProcessor implements ProcessorInterface
             $data->email,
             $data->password,
         );
-        $user = $this->loginHandler->handle($command);
+        $user = $this->commandBus->dispatch($command);
 
 
         $authUser = new AuthUser(
             $user->getId(),
-            $user->getEmail(),
-            $user->getRoles()
-
+            $user->getPermissions()
         );
 
         $token = $this->JWTManager->create($authUser);

@@ -2,12 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\Application\User\UserCase\GetUserById;
+namespace App\Application\User\GetUserById;
 
 use App\Domain\User\User;
 use App\Domain\User\UserRepositoryInterface;
+use Ticketing\Common\Application\Query\QueryHandlerInterface;
 
-final class GetUserByIdQueryHandler
+final class GetUserByIdQueryHandler implements QueryHandlerInterface
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
@@ -15,7 +16,7 @@ final class GetUserByIdQueryHandler
     }
 
 
-    public function handle(GetUserByIdQuery $query): ?User
+    public function __invoke(GetUserByIdQuery $query): ?User
     {
         return $this->userRepository->get($query->userId);
 

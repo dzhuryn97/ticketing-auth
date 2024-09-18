@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Application\User\UserCase\CreateUser;
+namespace App\Application\User\CreateUser;
 
 use Ramsey\Uuid\UuidInterface;
 use Ticketing\Common\Application\Command\CommandInterface;

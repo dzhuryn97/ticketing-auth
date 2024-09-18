@@ -2,7 +2,7 @@
 
 namespace App\Infrastructure\User;
 
-use App\Domain\User\Exception\UserEntityNotFoundException;
+use App\Domain\User\Exception\UserNotFoundException;
 use App\Domain\User\User;
 use App\Domain\User\UserRepositoryInterface;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
@@ -27,15 +27,15 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
     public function findUserByEmail(string $email): ?User
     {
         return $this->findOneBy([
-            'email' => $email
+            'email' => $email,
         ]);
     }
 
     public function get(UuidInterface $id): User
     {
         $user = $this->find($id);
-        if(!$user){
-            throw new UserEntityNotFoundException();
+        if (!$user) {
+            throw new UserNotFoundException();
         }
 
         return $user;
@@ -44,5 +44,10 @@ class UserRepository extends ServiceEntityRepository implements UserRepositoryIn
     public function findById(UuidInterface $id): ?User
     {
         return $this->find($id);
+    }
+
+    public function getAll(): array
+    {
+        return $this->findAll();
     }
 }

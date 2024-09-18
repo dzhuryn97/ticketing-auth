@@ -1,13 +1,15 @@
 <?php
 
-namespace App\Application\User\UserCase\Login;
+namespace App\Application\User\Login;
 
 use App\Domain\Auth\Exception\InvalidCredentialsException;
 use App\Domain\User\PasswordHasherInterface;
 use App\Domain\User\User;
 use App\Domain\User\UserRepositoryInterface;
+use App\Tests\Domain\Auth\Exception\TestAuthException;
+use Ticketing\Common\Application\Command\CommandHandlerInterface;
 
-class LoginUserHandler
+class LoginUserHandler implements CommandHandlerInterface
 {
     private UserRepositoryInterface $userRepository;
     private PasswordHasherInterface $passwordHasher;
@@ -21,7 +23,7 @@ class LoginUserHandler
         $this->passwordHasher = $passwordHasher;
     }
 
-    public function handle(LoginUserCommand $command): User
+    public function __invoke(LoginUserCommand $command): User
     {
         $user = $this->userRepository->findUserByEmail($command->email);
 

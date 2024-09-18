@@ -8,9 +8,8 @@ class AuthUserOutput
 {
     public function __construct(
         public readonly string $id,
-        public readonly string $email,
-    )
-    {
+        public readonly string $name,
+    ) {
     }
 
     public static function fromAuthUserDto(AuthUserDto $authUserDto): self
