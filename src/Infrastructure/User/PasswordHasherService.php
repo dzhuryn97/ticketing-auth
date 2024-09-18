@@ -9,9 +9,8 @@ use Symfony\Component\PasswordHasher\PasswordHasherInterface as SymfonyPasswordH
 class PasswordHasherService implements PasswordHasherInterface
 {
     public function __construct(
-        private readonly SymfonyPasswordHasher $passwordHasher = new NativePasswordHasher()
-    )
-    {
+        private readonly SymfonyPasswordHasher $passwordHasher = new NativePasswordHasher(),
+    ) {
     }
 
     public function hash(string $plainPassword): string

@@ -12,8 +12,7 @@ use Ticketing\Common\Application\Query\QueryInterface;
 class GetRoleQuery implements QueryInterface
 {
     public function __construct(
-        public readonly UuidInterface $roleId
-    )
-    {
+        public readonly UuidInterface $roleId,
+    ) {
     }
 }

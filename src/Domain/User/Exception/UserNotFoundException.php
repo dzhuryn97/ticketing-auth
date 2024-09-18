@@ -6,5 +6,4 @@ use Ticketing\Common\Domain\Exception\EntityNotFoundException;
 
 class UserNotFoundException extends EntityNotFoundException
 {
-
 }

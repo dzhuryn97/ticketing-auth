@@ -6,7 +6,6 @@ use App\Domain\Auth\Exception\InvalidCredentialsException;
 use App\Domain\User\PasswordHasherInterface;
 use App\Domain\User\User;
 use App\Domain\User\UserRepositoryInterface;
-use App\Tests\Domain\Auth\Exception\TestAuthException;
 use Ticketing\Common\Application\Command\CommandHandlerInterface;
 
 class LoginUserHandler implements CommandHandlerInterface
@@ -17,8 +16,7 @@ class LoginUserHandler implements CommandHandlerInterface
     public function __construct(
         UserRepositoryInterface $userRepository,
         PasswordHasherInterface $passwordHasher,
-    )
-    {
+    ) {
         $this->userRepository = $userRepository;
         $this->passwordHasher = $passwordHasher;
     }
@@ -27,11 +25,11 @@ class LoginUserHandler implements CommandHandlerInterface
     {
         $user = $this->userRepository->findUserByEmail($command->email);
 
-        if(!$user){
+        if (!$user) {
             throw new InvalidCredentialsException();
         }
 
-        if(!$this->passwordHasher->verify($command->password, $user->getPassword())){
+        if (!$this->passwordHasher->verify($command->password, $user->getPassword())) {
             throw new InvalidCredentialsException();
         }
 

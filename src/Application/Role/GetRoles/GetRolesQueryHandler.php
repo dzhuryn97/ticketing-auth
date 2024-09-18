@@ -8,9 +8,8 @@ use Ticketing\Common\Application\Query\QueryHandlerInterface;
 class GetRolesQueryHandler implements QueryHandlerInterface
 {
     public function __construct(
-        private readonly RoleRepositoryInterface $roleRepository
-    )
-    {
+        private readonly RoleRepositoryInterface $roleRepository,
+    ) {
     }
 
     public function __invoke(GetRolesQuery $query)

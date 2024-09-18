@@ -10,11 +10,9 @@ use Ticketing\Common\Application\Command\CommandInterface;
  */
 class CreateRoleCommand implements CommandInterface
 {
-
     public function __construct(
         public readonly string $name,
-        public readonly array $permissions
-    )
-    {
+        public readonly array $permissions,
+    ) {
     }
 }

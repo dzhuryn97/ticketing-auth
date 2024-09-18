@@ -9,9 +9,9 @@ class AuthTokenCreator
     public function __construct(
         private readonly TokenEncoder $tokenEncoder,
         private readonly AuthUserFactory $authUserFactory,
-
     ) {
     }
+
     public function createFromUser(User $user): string
     {
         $authUser = $this->authUserFactory->createFromUser($user);

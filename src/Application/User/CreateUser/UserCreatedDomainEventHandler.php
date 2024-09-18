@@ -12,9 +12,8 @@ class UserCreatedDomainEventHandler implements DomainEventHandlerInterface
 {
     public function __construct(
         private readonly EventBusInterface $eventBus,
-        private readonly UserRepositoryInterface $userRepository
-    )
-    {
+        private readonly UserRepositoryInterface $userRepository,
+    ) {
     }
 
     public function __invoke(UserCreatedDomainEvent $event)

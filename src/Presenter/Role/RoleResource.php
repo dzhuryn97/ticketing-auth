@@ -21,31 +21,29 @@ use Symfony\Component\Serializer\Attribute\Groups;
         new Post(
             processor: CreateRoleProcessor::class,
             denormalizationContext: [
-                'groups' => ['role:create']
+                'groups' => ['role:create'],
             ]
         ),
         new Put(
             processor: UpdateRoleProcessor::class
-        )
+        ),
     ],
     normalizationContext: [
-        'groups' => ['role:read']
+        'groups' => ['role:read'],
     ],
     paginationEnabled: false,
     provider: RoleStateProvider::class
 )]
 class RoleResource
 {
-
     public function __construct(
         #[Groups(['role:read'])]
         public ?UuidInterface $id = null,
-        #[Groups(['role:read','role:create'])]
-        public string        $name = '',
-        #[Groups(['role:read','role:create'])]
-        public array         $permissions = []
-    )
-    {
+        #[Groups(['role:read', 'role:create'])]
+        public string $name = '',
+        #[Groups(['role:read', 'role:create'])]
+        public array $permissions = [],
+    ) {
     }
 
     public static function createFromRole(Role $role): self

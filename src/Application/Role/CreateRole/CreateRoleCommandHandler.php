@@ -11,9 +11,8 @@ class CreateRoleCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private readonly RoleRepositoryInterface $roleRepository,
-        private readonly FlusherInterface $flusher
-    )
-    {
+        private readonly FlusherInterface $flusher,
+    ) {
     }
 
     public function __invoke(CreateRoleCommand $command)

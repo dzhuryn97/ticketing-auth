@@ -36,7 +36,7 @@ class RoleRepository extends ServiceEntityRepository implements RoleRepositoryIn
     public function getByIds(array $ids)
     {
         return $this->findBy([
-            'id' => $ids
+            'id' => $ids,
         ]);
     }
 }
