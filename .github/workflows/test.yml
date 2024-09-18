@@ -24,6 +24,7 @@ jobs:
                     file: docker/nginx/Dockerfile
                     load: true
                     tags: ${{ env.TEST_TAG }}
+                    target: dev
             -   name: Test
                 run: |
                     docker run --rm ${{ env.TEST_TAG }} composer run cs-check
