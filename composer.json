@@ -83,7 +83,7 @@
         "lint": "./vendor/bin/phplint",
         "cs-fix": "./vendor/bin/php-cs-fixer fix",
         "cs-check": "./vendor/bin/php-cs-fixer check",
-        "test": "./vendor/bin/phpunit"
+        "test-unit": "./vendor/bin/phpunit"
     },
     "conflict": {
         "symfony/symfony": "*"
