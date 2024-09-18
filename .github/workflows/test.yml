@@ -21,7 +21,7 @@ jobs:
                 uses: docker/build-push-action@v6
                 with:
                     context: .
-                    file: docker/nginx/Dockerfile
+                    file: docker/php/Dockerfile
                     load: true
                     tags: ${{ env.TEST_TAG }}
                     target: dev
