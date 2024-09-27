@@ -2,18 +2,17 @@
 
 namespace App\Application\User\UpdateUser;
 
+use App\Domain\Role\Role;
 use App\Domain\Role\RoleRepositoryInterface;
 use App\Domain\User\Exception\UserNotFoundException;
 use App\Domain\User\UserRepositoryInterface;
 use Ticketing\Common\Application\Command\CommandHandlerInterface;
-use Ticketing\Common\Application\FlusherInterface;
 
 class UpdateUserCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
         private readonly RoleRepositoryInterface $roleRepository,
-        private readonly FlusherInterface $flusher,
     ) {
     }
 
@@ -24,7 +23,7 @@ class UpdateUserCommandHandler implements CommandHandlerInterface
             throw new UserNotFoundException();
         }
 
-        $roles = null !== $command->roles ? $this->roleRepository->getByIds($command->roles) : null;
+        $roles = $this->resolveRoles($command->roles);
 
         $user->update(
             $command->name,
@@ -33,6 +32,18 @@ class UpdateUserCommandHandler implements CommandHandlerInterface
             $roles,
         );
 
-        $this->flusher->flush();
+        $this->userRepository->save($user);
+    }
+
+    /**
+     * @return Role[]|null
+     */
+    private function resolveRoles(?array $inputRoles): ?array
+    {
+        if (null === $inputRoles) {
+            return null;
+        }
+
+        return $this->roleRepository->getByIds($inputRoles);
     }
 }
