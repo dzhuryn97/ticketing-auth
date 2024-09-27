@@ -63,7 +63,6 @@ class UserResource
         #[Constraints\NotBlank(groups: ['user:create'])]
         #[Groups(groups: ['user:create', 'user:update'])]
         public readonly ?string $password = null,
-
         /**
          * @var array<RoleResource>
          */
