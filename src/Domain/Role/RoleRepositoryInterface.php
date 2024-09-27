@@ -21,4 +21,6 @@ interface RoleRepositoryInterface
     public function getByIds(array $ids);
 
     public function add(Role $role): void;
+
+    public function save(Role $role): void;
 }

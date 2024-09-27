@@ -31,6 +31,7 @@ class RoleRepository extends ServiceEntityRepository implements RoleRepositoryIn
     public function add(Role $role): void
     {
         $this->em->persist($role);
+        $this->em->flush();
     }
 
     public function getByIds(array $ids)
@@ -38,5 +39,10 @@ class RoleRepository extends ServiceEntityRepository implements RoleRepositoryIn
         return $this->findBy([
             'id' => $ids,
         ]);
+    }
+
+    public function save(Role $role): void
+    {
+        $this->em->flush();
     }
 }
