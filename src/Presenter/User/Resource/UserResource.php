@@ -45,34 +45,47 @@ use Symfony\Component\Validator\Constraints;
 )]
 class UserResource
 {
+    #[ApiProperty(readable: true, writable: false, identifier: true)]
+    #[Constraints\Length(min: 1, max: 255)]
+    #[Groups(groups: ['user:read'])]
+    public ?UuidInterface $id = null;
+
+    #[Constraints\Length(min: 1, max: 255)]
+    #[Constraints\NotBlank(groups: ['user:create', 'user:update'])]
+    #[Constraints\Email(groups: ['user:create', 'user:update'])]
+    #[Groups(groups: ['user:read', 'user:create', 'user:update'])]
+    public string $email = '';
+
+    #[Constraints\Length(min: 1, max: 255)]
+    #[Constraints\NotBlank(groups: ['user:create', 'user:update'])]
+    #[Groups(groups: ['user:read', 'user:create', 'user:update'])]
+    public string $name = '';
+
+    #[Constraints\Length(min: 1, max: 255)]
+    #[Constraints\NotBlank(groups: ['user:create'])]
+    #[Groups(groups: ['user:create', 'user:update'])]
+
+    public ?string $password = null;
+    /**
+     * @var array<RoleResource>
+     */
+    #[ApiProperty(
+        writableLink: false,
+        security: 'is_granted("ROLE_USER_FILL_ROLES")'
+    )]
+    #[Groups(groups: ['user:read', 'user:create', 'user:update'])]
+    public ?array $roles = null;
+
     public function __construct(
-        #[ApiProperty(readable: true, writable: false, identifier: true)]
-        #[Constraints\Length(min: 1, max: 255)]
-        #[Groups(groups: ['user:read'])]
-        public readonly ?UuidInterface $id = null,
-        #[Constraints\Length(min: 1, max: 255)]
-        #[Constraints\NotBlank(groups: ['user:create', 'user:update'])]
-        #[Constraints\Email(groups: ['user:create', 'user:update'])]
-        #[Groups(groups: ['user:read', 'user:create', 'user:update'])]
-        public readonly string $email = '',
-        #[Constraints\Length(min: 1, max: 255)]
-        #[Constraints\NotBlank(groups: ['user:create', 'user:update'])]
-        #[Groups(groups: ['user:read', 'user:create', 'user:update'])]
-        public readonly string $name = '',
-        #[Constraints\Length(min: 1, max: 255)]
-        #[Constraints\NotBlank(groups: ['user:create'])]
-        #[Groups(groups: ['user:create', 'user:update'])]
-        public readonly ?string $password = null,
-        /**
-         * @var array<RoleResource>
-         */
-        #[ApiProperty(
-            writableLink: false,
-            security: 'is_granted("ROLE_USER_FILL_ROLES")'
-        )]
-        #[Groups(groups: ['user:read', 'user:create', 'user:update'])]
-        public readonly ?array $roles = null,
+        ?UuidInterface $id = null,
+        string $email = '',
+        string $name = '',
+        ?array $roles = null,
     ) {
+        $this->id = $id;
+        $this->email = $email;
+        $this->name = $name;
+        $this->roles = $roles;
     }
 
     public static function fromUser(User $user): self
