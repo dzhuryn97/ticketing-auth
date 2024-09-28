@@ -64,8 +64,8 @@ class UserResource
     #[Constraints\Length(min: 1, max: 255)]
     #[Constraints\NotBlank(groups: ['user:create'])]
     #[Groups(groups: ['user:create', 'user:update'])]
-
     public ?string $password = null;
+
     /**
      * @var array<RoleResource>
      */

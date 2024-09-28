@@ -16,10 +16,7 @@ api_platform:
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
         extra_properties:
-            standard_put: true
             rfc_7807_compliant_errors: true
-    keep_legacy_inflector: false
     use_symfony_listeners: true
-
-    exception_to_status:
-        App\Domain\Auth\Exception\TestAuthException: 400
+    validator:
+        legacy_validation_exception: false

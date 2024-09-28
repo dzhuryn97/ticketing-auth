@@ -1,9 +1,8 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\Application\User\GetUserById;
 
+use App\Domain\User\Exception\UserNotFoundException;
 use App\Domain\User\User;
 use App\Domain\User\UserRepositoryInterface;
 use Ticketing\Common\Application\Query\QueryHandlerInterface;
@@ -17,7 +16,11 @@ final class GetUserByIdQueryHandler implements QueryHandlerInterface
 
     public function __invoke(GetUserByIdQuery $query): ?User
     {
-        return $this->userRepository->get($query->userId);
+        $user =  $this->userRepository->findById($query->userId);
+        if (!$user) {
+            throw new UserNotFoundException($query->userId);
+        }
 
+        return $user;
     }
 }

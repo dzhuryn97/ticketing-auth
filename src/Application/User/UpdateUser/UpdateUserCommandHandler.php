@@ -20,7 +20,7 @@ class UpdateUserCommandHandler implements CommandHandlerInterface
     {
         $user = $this->userRepository->findById($command->userId);
         if (!$user) {
-            throw new UserNotFoundException();
+            throw new UserNotFoundException($command->userId);
         }
 
         $roles = $this->resolveRoles($command->roles);
