@@ -11,7 +11,6 @@ class AuthTest extends AbstractIntegrationTestCase
      */
     public function loginReturnCredentialsWhenCalled()
     {
-        $this->assertEquals(1, 2);
         // Arrange
         $client = $this->createClient();
 
