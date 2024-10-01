@@ -47,7 +47,7 @@ jobs:
 #                    docker run --rm ${{ env.TEST_TAG }} composer run test-unit
             -   name: Run integration test
                 run: |
-                    docker run --rm --env='DATABASE_URL=postgresql://${{ env.DATABASE_USER }}:${{ env.DATABASE_PASSWORD }}@database:5432/${{ env.DATABASE_NAME }}?serverVersion=16&charset=utf8' --env='APP_ENV=test' ${{ env.TEST_TAG }}  sh -c '
+                    docker run --rm --env='DATABASE_URL=postgresql://${{ env.DATABASE_USER }}:${{ env.DATABASE_PASSWORD }}@172.17.0.1:5432/${{ env.DATABASE_NAME }}?serverVersion=16&charset=utf8' --env='APP_ENV=test' ${{ env.TEST_TAG }}  sh -c '
                        bin/console doctrine:database:create --if-not-exists;
                        bin/console doctrine:migrations:migrate --quiet;
                        bin/console doctrine:fixtures:load --quiet;
