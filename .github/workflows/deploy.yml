@@ -4,60 +4,14 @@ on:
         branches:
             - dev
 jobs:
-    build-webserver:
-        runs-on: ubuntu-latest
-        steps:
-            -   name: Checkout
-                uses: actions/checkout@v4
-            -   name: Setup build
-                uses: ./.github/actions/setup-build
-                with:
-                    docker-user: ${{ secrets.DOCKER_USER }}
-                    docker-password: ${{ secrets.DOCKER_PASSWORD }}
-            -   name: Build auth-php and push
-                uses: docker/build-push-action@v6
-                with:
-                    context: .
-                    push: true
-                    file: docker/nginx/Dockerfile
-                    tags: dzhuryn/ticketing-auth-webserver:latest
-    build-php:
-        needs: build-webserver
-        runs-on: ubuntu-latest
-        steps:
-            -   name: Checkout
-                uses: actions/checkout@v4
-            -   name: Setup build
-                uses: ./.github/actions/setup-build
-                with:
-                    docker-user: ${{ secrets.DOCKER_USER }}
-                    docker-password: ${{ secrets.DOCKER_PASSWORD }}
-            -   name: Build auth-php and push
-                uses: docker/build-push-action@v6
-                with:
-                    context: .
-                    push: true
-                    file: docker/php/Dockerfile
-                    tags: dzhuryn/ticketing-auth-php:latest
-    build-jobber:
-        needs: build-php
-        runs-on: ubuntu-latest
-        steps:
-            -   name: Checkout
-                uses: actions/checkout@v4
-            -   name: Setup build
-                uses: ./.github/actions/setup-build
-                with:
-                    docker-user: ${{ secrets.DOCKER_USER }}
-                    docker-password: ${{ secrets.DOCKER_PASSWORD }}
-            -   name: Build auth-php and push
-                uses: docker/build-push-action@v6
-                with:
-                    context: .
-                    push: true
-                    file: docker/jobber/Dockerfile
-                    tags: dzhuryn/ticketing-auth-jobber:latest
-
+    build:
+        uses: ./.github/workflows/build.yml
+        with:
+            image-tag: dev
+            image-php-target: dev
+        secrets:
+            dockerUser: ${{ secrets.DOCKER_USER }}
+            dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
     deploy:
         needs: build-jobber
         runs-on: ubuntu-latest
@@ -71,5 +25,7 @@ jobs:
                     debug: true
                     script: |
                         cd /var/www/ticketing
-                        docker image pull dzhuryn/ticketing-auth-webserver:dev-#hash
+                        docker image pull dzhuryn/ticketing-auth-webserver:dev
+                        docker image pull dzhuryn/ticketing-auth-php:dev
+                        docker image pull dzhuryn/ticketing-auth-jobber:dev
                         docker compose up -d --force-recreate
