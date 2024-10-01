@@ -11,8 +11,8 @@ use PHPUnit\Framework\Attributes\Test;
 // When_StateUnderTest_Expect_ExpectedBehavior
 class UserTest extends AbstractTestCase
 {
-    #[Test]
-    public function Create_ShouldRaiseDomainEvent_WhenUserCreated(): void
+    /** @test */
+    public function createShouldRaiseDomainEventWhenUserCreated(): void
     {
         // Act
         $user = new User(
@@ -25,8 +25,8 @@ class UserTest extends AbstractTestCase
         $this->assertDomainEventRaised($user, UserCreatedDomainEvent::class);
     }
 
-    #[Test]
-    public function Update_ShouldRaiseDomainEvent_WhenUserUpdated()
+    /** @test */
+    public function updateShouldRaiseDomainEventWhenUserUpdated()
     {
         // Arrange
         $user = new User(
@@ -49,8 +49,8 @@ class UserTest extends AbstractTestCase
         $this->assertDomainEventRaised($user, UserUpdatedDomainEvent::class);
     }
 
-    #[Test]
-    public function Update_ShouldNotRaiseDomainEvent_UserNotUpdated()
+    /** @test */
+    public function updateShouldNotRaiseDomainEventUserNotUpdated()
     {
         // Arrange
         $user = new User(

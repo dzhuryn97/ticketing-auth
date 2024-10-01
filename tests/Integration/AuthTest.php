@@ -36,7 +36,7 @@ class AuthTest extends AbstractIntegrationTestCase
         $client = $this->createClient();
 
         // Act
-        $response = $client->request('GET', '/api/auth/current');
+        $client->request('GET', '/api/auth/current');
 
         // Assert
         $this->assertResponseStatusCodeSame(401);
