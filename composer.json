@@ -37,7 +37,7 @@
         "symfony/twig-bundle": "7.1.*",
         "symfony/validator": "7.1.*",
         "symfony/yaml": "7.1.*",
-        "volodymyr/ticketing-common": "0.0.4",
+        "volodymyr/ticketing-common": "0.*",
         "webmozart/assert": "*"
     },
     "config": {
@@ -105,12 +105,5 @@
         "symfony/phpunit-bridge": "^7.1",
         "symfony/stopwatch": "7.1.*",
         "symfony/web-profiler-bundle": "7.1.*"
-    },
-    "repositories": [{
-        "type": "path",
-        "url": "/common",
-        "options": {
-            "symclink": null
-        }
-    }]
+    }
 }
