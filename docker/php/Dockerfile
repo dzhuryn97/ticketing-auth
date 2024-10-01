@@ -14,7 +14,7 @@ RUN chown -R www-data:www-data /app
 
 FROM build as dev
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
-§ENV COMPOSER_ALLOW_SUPERUSER=1
+ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --ignore-platform-reqs
 
 FROM build as prod
