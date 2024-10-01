@@ -22,8 +22,8 @@ jobs:
             -   name: Setup build
                 uses: ./.github/actions/setup-build
                 with:
-                    dockerUser: ${{ secrets.dockerUser }}
-                    dockerPassword: ${{ secrets.dockerPassword }}
+                    docker-user: ${{ secrets.dockerUser }}
+                    docker-password: ${{ secrets.dockerPassword }}
             -   name: Build auth-php and push
                 uses: docker/build-push-action@v6
                 with:
@@ -40,8 +40,8 @@ jobs:
             -   name: Setup build
                 uses: ./.github/actions/setup-build
                 with:
-                    dockerUser: ${{ secrets.dockerUser }}
-                    dockerPassword: ${{ secrets.dockerPassword }}
+                    docker-user: ${{ secrets.dockerUser }}
+                    docker-password: ${{ secrets.dockerPassword }}
             -   name: Build auth-php and push
                 uses: docker/build-push-action@v6
                 with:
@@ -59,8 +59,8 @@ jobs:
             -   name: Setup build
                 uses: ./.github/actions/setup-build
                 with:
-                    dockerUser: ${{ secrets.dockerUser }}
-                    dockerPassword: ${{ secrets.dockerPassword }}
+                    docker-user: ${{ secrets.dockerUser }}
+                    docker-password: ${{ secrets.dockerPassword }}
             -   name: Build auth-php and push
                 uses: docker/build-push-action@v6
                 with:
