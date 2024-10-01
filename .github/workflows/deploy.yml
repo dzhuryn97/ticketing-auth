@@ -13,7 +13,7 @@ jobs:
 #            dockerUser: ${{ secrets.DOCKER_USER }}
 #            dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
     deploy:
-        needs: build
+#        needs: build
         runs-on: ubuntu-latest
         steps:
             -   name: ssh key passphrase
