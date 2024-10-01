@@ -18,6 +18,8 @@ jobs:
                     POSTGRES_USER: ${{ env.DATABASE_USER }}
                     POSTGRES_PASSWORD: ${{ env.DATABASE_PASSWORD }}
                     POSTGRES_DB: ${{ env.DATABASE_NAME }}
+                ports:
+                    - '5432:5432'
         steps:
             -   uses: actions/checkout@v4
             -   name: Setup build
