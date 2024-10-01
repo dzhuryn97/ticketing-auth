@@ -19,11 +19,14 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     ) {
     }
 
+    public const string USER1_EMAIL = 'admin@ticketing.com';
+    public const string USER1_PASSWORD = '123456';
+
     private const USERS = [
         [
             'name' => 'Admin',
-            'email' => 'admin@ticketing.com',
-            'password' => '123456',
+            'email' => self::USER1_EMAIL,
+            'password' => self::USER1_PASSWORD,
             'roles' => [
                 'Admin',
             ],

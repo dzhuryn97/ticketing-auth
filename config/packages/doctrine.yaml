@@ -26,7 +26,7 @@ doctrine:
                 prefix: 'App\'
                 alias: User
         controller_resolver:
-            auto_mapping: true
+            enabled: false
 
 when@test:
     doctrine:
