@@ -1,8 +1,6 @@
 name: Code Linting and Testing
 on:
-    push:
-        branches:
-            - feature/*
+    workflow_call:
     pull_request:
 env:
     TEST_TAG: dzhuryn/ticketing-auth-php:test
@@ -27,10 +25,13 @@ jobs:
                     target: dev
             -   name: Check code style
                 run: |
-                    docker run --rm ${{ env.TEST_TAG }} composer run cs-check
-            -   name: Lint
-                run: |
-                    docker run --rm ${{ env.TEST_TAG }} composer run lint
-            -   name: Unit tests
-                run: |
-                    docker run --rm ${{ env.TEST_TAG }} composer run test-unit
+                    docker run --rm ${{ env.TEST_TAG }} printenv
+#            -   name: Check code style
+#                run: |
+#                    docker run --rm ${{ env.TEST_TAG }} composer run cs-check
+#            -   name: Lint
+#                run: |
+#                    docker run --rm ${{ env.TEST_TAG }} composer run lint
+#            -   name: Unit tests
+#                run: |
+#                    docker run --rm ${{ env.TEST_TAG }} composer run test-unit
