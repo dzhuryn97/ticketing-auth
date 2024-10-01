@@ -4,14 +4,14 @@ on:
         branches:
             - dev
 jobs:
-    build:
-        uses: ./.github/workflows/build.yml
-        with:
-            image-tag: dev
-            image-php-target: dev
-        secrets:
-            dockerUser: ${{ secrets.DOCKER_USER }}
-            dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
+#    build:
+#        uses: ./.github/workflows/build.yml
+#        with:
+#            image-tag: dev
+#            image-php-target: dev
+#        secrets:
+#            dockerUser: ${{ secrets.DOCKER_USER }}
+#            dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
     deploy:
         needs: build
         runs-on: ubuntu-latest
@@ -31,4 +31,4 @@ jobs:
                         docker compose up -d --force-recreate
 
                         docker compose exec auth_php bin/console doctrine:migrations:migrate --no-interaction
-                        bin/console doctrine:fixtures:load --no-interaction
+                        docker compose exec auth_php bin/console doctrine:fixtures:load --no-interaction
