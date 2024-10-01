@@ -26,6 +26,8 @@ jobs:
             -   name: Check code style
                 run: |
                     docker run --rm ${{ env.TEST_TAG }} printenv
+                env:
+                    MY_VAR: 'hello'
 #            -   name: Check code style
 #                run: |
 #                    docker run --rm ${{ env.TEST_TAG }} composer run cs-check
