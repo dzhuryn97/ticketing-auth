@@ -9,13 +9,13 @@ WORKDIR /app
 COPY docker/php/php.ini /usr/local/etc/php/php.ini
 COPY docker/php/www.conf /usr/local/etc/php/www.conf
 COPY ./ ./
-
 RUN chown -R www-data:www-data /app
 
 FROM build as dev
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
 RUN composer install --ignore-platform-reqs
+RUN bin/console assets:install
 
 FROM build as prod
 

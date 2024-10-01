@@ -29,3 +29,6 @@ jobs:
                         docker image pull dzhuryn/ticketing-auth-php:dev
                         docker image pull dzhuryn/ticketing-auth-jobber:dev
                         docker compose up -d --force-recreate
+
+                        docker compose exec auth_php bin/console doctrine:migrations:migrate --no-interaction
+                        bin/console doctrine:fixtures:load --no-interaction
