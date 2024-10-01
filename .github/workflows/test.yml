@@ -4,10 +4,20 @@ on:
     pull_request:
 env:
     TEST_TAG: dzhuryn/ticketing-auth-php:test
+    DATABASE_USER: db_user
+    DATABASE_PASSWORD: db_user
+    DATABASE_NAME: db_name
 jobs:
     test:
         name: Code Linting and Testing
         runs-on: ubuntu-24.04
+        services:
+            database:
+                image: postgres:12.20-alpine
+                env:
+                    POSTGRES_USER: ${{ env.DATABASE_USER }}
+                    POSTGRES_PASSWORD: ${{ env.DATABASE_PASSWORD }}
+                    POSTGRES_DB: ${{ env.DATABASE_NAME }}
         steps:
             -   uses: actions/checkout@v4
             -   name: Setup build
@@ -23,11 +33,9 @@ jobs:
                     load: true
                     tags: ${{ env.TEST_TAG }}
                     target: dev
-            -   name: Check code style
-                run: |
-                    docker run --rm ${{ env.TEST_TAG }} printenv
-                env:
-                    MY_VAR: 'hello'
+#            -   name: Check code style
+#                run: |
+#                    docker run --rm ${{ env.TEST_TAG }} composer run cs-check
 #            -   name: Check code style
 #                run: |
 #                    docker run --rm ${{ env.TEST_TAG }} composer run cs-check
@@ -37,3 +45,11 @@ jobs:
 #            -   name: Unit tests
 #                run: |
 #                    docker run --rm ${{ env.TEST_TAG }} composer run test-unit
+            -   name: Run integration test
+                run: |
+                    docker run --rm --env='DATABASE_URL=postgresql://${{ env.DATABASE_USER }}:${{ env.DATABASE_PASSWORD }}@database:5432/${{ env.DATABASE_NAME }}?serverVersion=16&charset=utf8' --env='APP_ENV=test' ${{ env.TEST_TAG }}  sh -c '
+                       bin/console doctrine:database:create --if-not-exists;
+                       bin/console doctrine:migrations:migrate --quiet;
+                       bin/console doctrine:fixtures:load --quiet;
+                       composer run test-integration;
+                       '
