@@ -4,32 +4,27 @@ on:
         branches:
             - main
 jobs:
-#    discover-tag:
-#        runs-on: ubuntu-latest
-#        steps:
-#            -   name: Checkout
-#                uses: actions/checkout@v4
-#            -   uses: oprypin/find-latest-tag@v1
-#                with:
-#                    repository: dzhuryn97/git-learning
-#                id: tag-discover
-#            -   run: echo "Tag is at version ${{ steps.tag-discover.outputs.tag }}"
-#        outputs:
-#            tag: ${{ steps.tag-discover.outputs.tag }}
     discover-tag:
         runs-on: ubuntu-latest
         steps:
-            - run: echo "test step"
+            -   name: Checkout
+                uses: actions/checkout@v4
+            -   uses: oprypin/find-latest-tag@v1
+                with:
+                    repository: dzhuryn97/git-learning
+                id: tag-discover
+            -   run: echo "Tag is at version ${{ steps.tag-discover.outputs.tag }}"
         outputs:
-            tag: 0.7.0
-#    build:
-#        uses: ./.github/workflows/build.yml
-#        with:
-#            image-tag: dev
-#            image-php-target: dev
-#        secrets:
-#            dockerUser: ${{ secrets.DOCKER_USER }}
-#            dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
+            tag: ${{ steps.tag-discover.outputs.tag }}
+    build:
+        needs: discover-tag
+        uses: ./.github/workflows/build.yml
+        with:
+            image-tag: ${{ needs.discover-tag.outputs.tag }}
+            image-php-target: prod
+        secrets:
+            dockerUser: ${{ secrets.DOCKER_USER }}
+            dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
     deploy:
         needs: discover-tag
         runs-on: ubuntu-latest
