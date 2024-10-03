@@ -16,23 +16,17 @@ jobs:
             -   run: echo "Tag is at version ${{ steps.tag-discover.outputs.tag }}"
         outputs:
             tag: 0.8.0
-
-    build-fake:
+    build:
         needs: discover-tag
-        runs-on: ubuntu-latest
-        steps:
-            -   run: echo Fake build
-#    build:
-#        needs: discover-tag
-#        uses: ./.github/workflows/build.yml
-#        with:
-#            image-tag: ${{ needs.discover-tag.outputs.tag }}
-#            image-php-target: prod
-#        secrets:
-#            dockerUser: ${{ secrets.DOCKER_USER }}
-#            dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
+        uses: ./.github/workflows/build.yml
+        with:
+            image-tag: ${{ needs.discover-tag.outputs.tag }}
+            image-php-target: prod
+        secrets:
+            dockerUser: ${{ secrets.DOCKER_USER }}
+            dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
     deploy:
-        needs: [build-fake, discover-tag]
+        needs: [build, discover-tag]
         runs-on: ubuntu-latest
         steps:
             -   name: ssh key passphrase
