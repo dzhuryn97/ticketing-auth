@@ -15,7 +15,7 @@ jobs:
                 id: tag-discover
             -   run: echo "Tag is at version ${{ steps.tag-discover.outputs.tag }}"
         outputs:
-            tag: 0.8.0
+            tag: ${{ steps.tag-discover.outputs.tag }}
     build:
         needs: discover-tag
         uses: ./.github/workflows/build.yml
