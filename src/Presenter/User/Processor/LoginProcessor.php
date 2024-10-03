@@ -5,22 +5,19 @@ namespace App\Presenter\User\Processor;
 use ApiPlatform\Metadata\Operation;
 use ApiPlatform\State\ProcessorInterface;
 use App\Application\User\Login\LoginUserCommand;
-use App\Application\User\Login\LoginUserHandler;
+use App\Presenter\User\Factory\AuthUserFactory;
+use App\Presenter\User\JWTTokenIssuer;
 use App\Presenter\User\Output\JWT;
 use App\Presenter\User\Payload\Login;
-use Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface;
 use Ticketing\Common\Application\Command\CommandBusInterface;
-use Ticketing\Common\Presenter\Symfony\Security\AuthUser;
 
 class LoginProcessor implements ProcessorInterface
 {
-
-
     public function __construct(
         private readonly CommandBusInterface $commandBus,
-        private readonly JWTTokenManagerInterface $JWTManager
-    )
-    {
+        private readonly AuthUserFactory $authUserFactory,
+        private readonly JWTTokenIssuer $JWTTokenIssuer,
+    ) {
     }
 
     /**
@@ -34,17 +31,9 @@ class LoginProcessor implements ProcessorInterface
         );
         $user = $this->commandBus->dispatch($command);
 
+        $authUser = $this->authUserFactory->createFromUser($user);
+        $jwtToken = $this->JWTTokenIssuer->issueToken($authUser);
 
-        $authUser = new AuthUser(
-            $user->getId(),
-            $user->getEmail(),
-            $user->getPermissions()
-
-        );
-
-        $token = $this->JWTManager->create($authUser);
-
-
-        return new JWT($token);
+        return new JWT($jwtToken);
     }
 }

@@ -8,9 +8,8 @@ use Ticketing\Common\Domain\DomainEvent;
 class UserUpdatedDomainEvent extends DomainEvent
 {
     public function __construct(
-        public readonly UuidInterface $userId
-    )
-    {
+        public readonly UuidInterface $userId,
+    ) {
         parent::__construct();
     }
 }

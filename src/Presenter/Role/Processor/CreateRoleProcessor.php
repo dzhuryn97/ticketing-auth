@@ -12,12 +12,10 @@ use Ticketing\Common\Application\Query\QueryBusInterface;
 
 class CreateRoleProcessor implements ProcessorInterface
 {
-
     public function __construct(
         private readonly CommandBusInterface $commandBus,
-        private readonly QueryBusInterface $queryBus
-    )
-    {
+        private readonly QueryBusInterface $queryBus,
+    ) {
     }
 
     /**
@@ -34,6 +32,7 @@ class CreateRoleProcessor implements ProcessorInterface
         $role = $this->queryBus->ask(
             new GetRoleQuery($roleId)
         );
+
         return RoleResource::createFromRole($role);
     }
 }

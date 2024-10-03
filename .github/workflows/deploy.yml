@@ -1,27 +1,34 @@
-name: Deploy to dev workfow
-on: workflow_dispatch
+name: Deploy to dev env
+on:
+    push:
+        branches:
+            - dev
 jobs:
+#    build:
+#        uses: ./.github/workflows/build.yml
+#        with:
+#            image-tag: dev
+#            image-php-target: dev
+#        secrets:
+#            dockerUser: ${{ secrets.DOCKER_USER }}
+#            dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
     deploy:
+#        needs: build
         runs-on: ubuntu-latest
         steps:
-            -   name: Checkout
-                uses: actions/checkout@v4
-            -   name: Log in to Docker Hub
-                uses: docker/login-action@v3
+            -   name: ssh key passphrase
+                uses: appleboy/ssh-action@v1.0.3
                 with:
-                    username: ${{ secrets.DOCKER_USER }}
-                    password: ${{ secrets.DOCKER_PASSWORD }}
-            -   name: Set up Docker Buildx
-                uses: docker/setup-buildx-action@v3
-                with:
-                    version: "lab:latest"
-                    driver: cloud
-                    endpoint: "dzhuryn/cloud-builder"
-                    install: true
-            -   name: Build and push
-                uses: docker/build-push-action@v6
-                with:
-                    context: .
-                    push: true
-                    file: docker/nginx/Dockerfile
-                    tags: dzhuryn/ticketing-auth-webserver:latest
+                    host: ${{ secrets.SERVER_HOST }}
+                    username: ${{ secrets.SERVER_USERNAME }}
+                    key: ${{ secrets.SERVER_KEY }}
+                    debug: true
+                    script: |
+                        cd /var/www/ticketing
+                        docker image pull dzhuryn/ticketing-auth-webserver:dev
+                        docker image pull dzhuryn/ticketing-auth-php:dev
+                        docker image pull dzhuryn/ticketing-auth-jobber:dev
+                        docker compose up -d --force-recreate
+
+                        docker compose exec auth_php bin/console doctrine:migrations:migrate --no-interaction
+                        docker compose exec auth_php bin/console doctrine:fixtures:load --no-interaction

@@ -2,10 +2,12 @@
 
 namespace App\Domain\User\Exception;
 
-class EmailIsUsedException extends \DomainException
+use Ticketing\Common\Domain\Exception\BusinessException;
+
+class EmailIsUsedException extends BusinessException
 {
     public function __construct(string $email)
     {
-        parent::__construct(sprintf('Email isn\'t unique'));
+        parent::__construct(sprintf('Email %s already used', $email), 'EmailIsUsed');
     }
 }

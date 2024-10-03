@@ -7,7 +7,6 @@ use Ticketing\Common\Application\Command\CommandInterface;
 
 class CreateUserCommand implements CommandInterface
 {
-
     /**
      * @param array<UuidInterface> $roles
      */
@@ -15,8 +14,7 @@ class CreateUserCommand implements CommandInterface
         public readonly string $name,
         public readonly string $email,
         public readonly string $password,
-        public readonly array $roles
-    )
-    {
+        public readonly array $roles,
+    ) {
     }
 }

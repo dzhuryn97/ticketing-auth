@@ -3,22 +3,73 @@
 namespace App\Tests\Unit\Domain\User;
 
 use App\Domain\User\User;
-use App\Tests\Unit\BaseTest;
+use App\Domain\User\UserCreatedDomainEvent;
+use App\Domain\User\UserUpdatedDomainEvent;
+use App\Tests\Unit\AbstractTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-class UserTest extends BaseTest
+// When_StateUnderTest_Expect_ExpectedBehavior
+class UserTest extends AbstractTestCase
 {
-    public function create_user_test()
+    /** @test */
+    public function createShouldRaiseDomainEventWhenUserCreated(): void
     {
-
-        //Arrange
+        // Act
         $user = new User(
-            $this->faker->name,
-            $this->faker->email,
-            $this->faker->password,
+            $this->faker->name(),
+            $this->faker->email(),
+            $this->faker->password(),
             []
         );
-        //Act
 
-        //Assert
+        $this->assertDomainEventRaised($user, UserCreatedDomainEvent::class);
+    }
+
+    /** @test */
+    public function updateShouldRaiseDomainEventWhenUserUpdated()
+    {
+        // Arrange
+        $user = new User(
+            $this->faker->name(),
+            $this->faker->email(),
+            $this->faker->password(),
+            []
+        );
+        $user->clearDomainEvents();
+
+        // Act
+        $user->update(
+            $this->faker->name(),
+            $this->faker->email(),
+            $this->faker->password(),
+            []
+        );
+
+        // Assert
+        $this->assertDomainEventRaised($user, UserUpdatedDomainEvent::class);
+    }
+
+    /** @test */
+    public function updateShouldNotRaiseDomainEventUserNotUpdated()
+    {
+        // Arrange
+        $user = new User(
+            $name = $this->faker->name(),
+            $email = $this->faker->email(),
+            $this->faker->password(),
+            $roles = []
+        );
+        $user->clearDomainEvents();
+
+        // Act
+        $user->update(
+            $name,
+            $email,
+            null,
+            $roles
+        );
+
+        // Assert
+        $this->assertCount(0, $user->releaseDomainEvents());
     }
 }

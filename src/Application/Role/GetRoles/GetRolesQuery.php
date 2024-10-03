@@ -10,5 +10,4 @@ use Ticketing\Common\Application\Query\QueryInterface;
  */
 class GetRolesQuery implements QueryInterface
 {
-
 }

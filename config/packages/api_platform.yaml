@@ -1,6 +1,6 @@
 api_platform:
     title: Hello API Platform
-    version: 1.0.0
+    version: 1.1.1
     mapping:
         paths:
             - '%kernel.project_dir%/src/Presenter/'
@@ -16,8 +16,7 @@ api_platform:
         cache_headers:
             vary: ['Content-Type', 'Authorization', 'Origin']
         extra_properties:
-            standard_put: true
             rfc_7807_compliant_errors: true
-    keep_legacy_inflector: false
     use_symfony_listeners: true
-
+    validator:
+        legacy_validation_exception: false

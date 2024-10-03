@@ -2,10 +2,12 @@
 
 namespace App\Domain\Auth\Exception;
 
-class InvalidCredentialsException extends \DomainException
+use Ticketing\Common\Domain\Exception\BusinessException;
+
+class InvalidCredentialsException extends BusinessException
 {
     public function __construct()
     {
-        parent::__construct('Credentials invalid');
+        parent::__construct('Credentials invalid', 'InvalidCredentials');
     }
 }

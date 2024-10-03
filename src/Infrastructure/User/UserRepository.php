@@ -14,20 +14,29 @@ use Ramsey\Uuid\UuidInterface;
  */
 class UserRepository extends ServiceEntityRepository implements UserRepositoryInterface
 {
+    private \Doctrine\ORM\EntityManagerInterface $em;
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, User::class);
+        $this->em = $this->getEntityManager();
     }
 
     public function add(User $user): void
     {
-        $this->getEntityManager()->persist($user);
+        $this->em->persist($user);
+        $this->em->flush();
+    }
+
+    public function save(User $user): void
+    {
+        $this->em->flush();
     }
 
     public function findUserByEmail(string $email): ?User
     {
         return $this->findOneBy([
-            'email' => $email
+            'email' => $email,
         ]);
     }
 

@@ -40,9 +40,8 @@ class User extends DomainEntity
         string $name,
         string $email,
         string $password,
-        array  $roles
-    )
-    {
+        array $roles,
+    ) {
         $this->id = UuidV4::uuid4();
         $this->name = $name;
         $this->email = $email;
@@ -50,22 +49,19 @@ class User extends DomainEntity
         $this->roles = new ArrayCollection($roles);
 
         $this->raiseDomainEvent(new UserCreatedDomainEvent($this->id));
-
     }
 
     public function update(
-        string  $name,
-        string  $email,
+        string $name,
+        string $email,
         ?string $password,
-        ?array  $roles = null
-    ): void
-    {
-
+        ?array $roles = null,
+    ): void {
         if (
-            $name === $this->name &&
-            $email === $this->email &&
-            ($roles === null || $this->isRoleEquals($roles)) &&
-            $password === null
+            $name === $this->name
+            && $email === $this->email
+            && (null === $roles || $this->isRoleEquals($roles))
+            && null === $password
         ) {
             return;
         }
@@ -74,7 +70,7 @@ class User extends DomainEntity
         $this->name = $name;
         $this->email = $email;
 
-        if($roles && !$this->isRoleEquals($roles)){
+        if ($roles && !$this->isRoleEquals($roles)) {
             $this->roles->clear();
             foreach ($roles as $role) {
                 $this->addRole($role);
@@ -110,9 +106,7 @@ class User extends DomainEntity
 
     public function getPermissions(): array
     {
-        $permissions = [
-            'ROLE_USER'
-        ];
+        $permissions = [];
         foreach ($this->roles as $role) {
             $permissions = array_merge($role->getPermission(), $permissions);
         }
@@ -124,7 +118,6 @@ class User extends DomainEntity
     {
         return $this->roles;
     }
-
 
     private function addRole(Role $role): void
     {

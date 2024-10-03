@@ -13,16 +13,14 @@ use Ticketing\Common\Application\Query\QueryBusInterface;
 
 class UserProvider implements ProviderInterface
 {
-
     public function __construct(
-        private readonly QueryBusInterface $queryBus
-    )
-    {
+        private readonly QueryBusInterface $queryBus,
+    ) {
     }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
     {
-        if($operation instanceof Get){
+        if ($operation instanceof Get) {
             $userId = $uriVariables['id'];
             $user = $this->queryBus->ask(new GetUserByIdQuery($userId));
 
@@ -32,9 +30,9 @@ class UserProvider implements ProviderInterface
 
         $users = $this->queryBus->ask(new GetUsersQuery());
 
-        return array_map(function (User $user){
+        return array_map(function (User $user) {
             return  UserResource::fromUser($user);
 
-        },$users);
+        }, $users);
     }
 }

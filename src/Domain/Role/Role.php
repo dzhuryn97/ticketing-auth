@@ -2,7 +2,6 @@
 
 namespace App\Domain\Role;
 
-
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\Id;
@@ -31,9 +30,8 @@ class Role
      */
     public function __construct(
         string $name,
-        array  $permission
-    )
-    {
+        array $permission,
+    ) {
         $this->id = UuidV4::uuid4();
         $this->name = $name;
         $this->permission = $permission;
@@ -44,9 +42,8 @@ class Role
      */
     public function update(
         string $name,
-        array  $permission
-    ): void
-    {
+        array $permission,
+    ): void {
         $this->name = $name;
         $this->permission = $permission;
     }

@@ -6,5 +6,4 @@ use Ticketing\Common\Application\Query\QueryInterface;
 
 class GetCurrentUserQuery implements QueryInterface
 {
-
 }

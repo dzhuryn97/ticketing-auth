@@ -1,0 +1,59 @@
+name: Code Linting and Testing
+on:
+    workflow_call:
+    pull_request:
+env:
+    TEST_TAG: dzhuryn/ticketing-auth-php:test
+    DATABASE_USER: db_user
+    DATABASE_PASSWORD: db_user
+    DATABASE_NAME: db_name
+    DATABASE_HOST: 172.17.0.1
+jobs:
+    test:
+        name: Code Linting and Testing
+        runs-on: ubuntu-24.04
+        services:
+            database:
+                image: postgres:12.20-alpine
+                env:
+                    POSTGRES_USER: ${{ env.DATABASE_USER }}
+                    POSTGRES_PASSWORD: ${{ env.DATABASE_PASSWORD }}
+                    POSTGRES_DB: ${{ env.DATABASE_NAME }}
+                ports:
+                    - '5432:5432'
+        steps:
+            -   uses: actions/checkout@v4
+            -   name: Setup build
+                uses: ./.github/actions/setup-build
+                with:
+                    docker-user: ${{ secrets.DOCKER_USER }}
+                    docker-password: ${{ secrets.DOCKER_PASSWORD }}
+            -   name: Build and export to Docker
+                uses: docker/build-push-action@v6
+                with:
+                    context: .
+                    file: docker/php/Dockerfile
+                    load: true
+                    tags: ${{ env.TEST_TAG }}
+                    target: dev
+            -   name: Check code style
+                run: |
+                    docker run --rm ${{ env.TEST_TAG }} composer run cs-check
+            -   name: Check code style
+                run: |
+                    docker run --rm ${{ env.TEST_TAG }} composer run cs-check
+            -   name: Lint
+                run: |
+                    docker run --rm ${{ env.TEST_TAG }} composer run lint
+            -   name: Unit tests
+                run: |
+                    docker run --rm ${{ env.TEST_TAG }} composer run test-unit
+            -   name: Run integration test
+                run: |
+                    docker run --rm --env='DATABASE_URL=postgresql://${{ env.DATABASE_USER }}:${{ env.DATABASE_PASSWORD }}@${{ env.DATABASE_HOST }}:5432/${{ env.DATABASE_NAME }}?serverVersion=16&charset=utf8' --env='APP_ENV=test' ${{ env.TEST_TAG }}  sh -c '
+                       bin/console doctrine:database:create --if-not-exists;
+                       bin/console doctrine:migrations:migrate --no-interaction;
+                       bin/console doctrine:fixtures:load --no-interaction;
+                        bin/console lexik:jwt:generate-keypair --no-interaction --env=test;
+                       composer run test-integration;
+                       '

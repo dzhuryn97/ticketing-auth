@@ -8,35 +8,30 @@ use App\Domain\User\PasswordHasherInterface;
 use App\Domain\User\User;
 use App\Domain\User\UserRepositoryInterface;
 use Ticketing\Common\Application\Command\CommandHandlerInterface;
-use Ticketing\Common\Application\FlusherInterface;
 
 class CreateUserCommandHandler implements CommandHandlerInterface
 {
     public function __construct(
         private readonly UserRepositoryInterface $userRepository,
         private readonly PasswordHasherInterface $passwordHasher,
-        private readonly FlusherInterface $flusher,
-        private readonly RoleRepositoryInterface $roleRepository
-    )
-    {
+        private readonly RoleRepositoryInterface $roleRepository,
+    ) {
     }
 
     public function __invoke(CreateUserCommand $command)
     {
         $this->ensureEmailIsUnique($command->email);
 
-        $roles = $command->roles ? $this->roleRepository->getByIds($command->roles): [];
+        $roles = $command->roles ? $this->roleRepository->getByIds($command->roles) : [];
 
         $user = new User(
             $command->name,
             $command->email,
             $this->passwordHasher->hash($command->password),
             $roles
-
         );
 
         $this->userRepository->add($user);
-        $this->flusher->flush();
 
         return $user;
     }

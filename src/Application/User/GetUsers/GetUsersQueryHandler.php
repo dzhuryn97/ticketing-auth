@@ -8,9 +8,8 @@ use Ticketing\Common\Application\Query\QueryHandlerInterface;
 class GetUsersQueryHandler implements QueryHandlerInterface
 {
     public function __construct(
-        private readonly UserRepositoryInterface $userRepository
-    )
-    {
+        private readonly UserRepositoryInterface $userRepository,
+    ) {
     }
 
     public function __invoke(GetUsersQuery $query)

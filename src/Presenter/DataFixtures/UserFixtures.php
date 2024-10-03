@@ -16,34 +16,37 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
     public function __construct(
         private readonly CommandBusInterface $commandBus,
         private readonly QueryBusInterface $queryBus,
-    )
-    {
+    ) {
     }
+
+    public const string USER1_EMAIL = 'admin@ticketing.com';
+    public const string USER1_PASSWORD = '123456';
 
     private const USERS = [
         [
             'name' => 'Admin',
-            'email' => 'admin@ticketing.com',
-            'password' => '123456',
+            'email' => self::USER1_EMAIL,
+            'password' => self::USER1_PASSWORD,
             'roles' => [
-                'Admin'
+                'Admin',
             ],
-        ]
+        ],
     ];
 
     public function load(ObjectManager $manager): void
     {
         $users = $this->queryBus->ask(new GetUsersQuery());
-        if($users){
+        if ($users) {
             return;
         }
 
         foreach (self::USERS as $userInput) {
-            $roleIds =array_map(function ($roleName){
+            $roleIds = array_map(function ($roleName) {
                 /** @var Role $role */
-                $role = $this->getReference(sprintf('ROLE_%s',$roleName));
+                $role = $this->getReference(sprintf('ROLE_%s', $roleName));
+
                 return $role->getId();
-            },$userInput['roles']);
+            }, $userInput['roles']);
 
             $this->commandBus->dispatch(new CreateUserCommand(
                 $userInput['name'],
@@ -58,8 +61,8 @@ class UserFixtures extends Fixture implements DependentFixtureInterface
 
     public function getDependencies()
     {
-       return [
-           RoleFixtures::class
-       ];
+        return [
+            RoleFixtures::class,
+        ];
     }
 }

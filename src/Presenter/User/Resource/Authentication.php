@@ -24,7 +24,7 @@ use App\Presenter\User\Provider\AuthenticationProvider;
             output: AuthUserOutput::class,
             provider: AuthenticationProvider::class,
             security: "is_granted('ROLE_USER')"
-        )
+        ),
     ],
     shortName: 'auth',
 )]

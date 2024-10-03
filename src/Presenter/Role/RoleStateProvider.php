@@ -13,9 +13,8 @@ use Ticketing\Common\Application\Query\QueryBusInterface;
 class RoleStateProvider implements ProviderInterface
 {
     public function __construct(
-        private readonly QueryBusInterface $queryBus
-    )
-    {
+        private readonly QueryBusInterface $queryBus,
+    ) {
     }
 
     public function provide(Operation $operation, array $uriVariables = [], array $context = []): object|array|null
