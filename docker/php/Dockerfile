@@ -11,13 +11,15 @@ COPY docker/php/www.conf /usr/local/etc/php/www.conf
 COPY ./ ./
 RUN chown -R www-data:www-data /app
 
-FROM build as dev
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 ENV COMPOSER_ALLOW_SUPERUSER=1
+
+FROM build as dev
 RUN composer install --ignore-platform-reqs
-RUN bin/console assets:install
 
 FROM build as prod
+ENV APP_ENV=prod
+RUN composer install --no-dev --no-interaction --ignore-platform-reqs
 
 
 
