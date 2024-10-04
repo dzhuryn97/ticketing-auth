@@ -9,9 +9,9 @@ on:
                 required: true
                 type: string
         secrets:
-            dockerUser:
+            DOCKER_USER:
                 required: true
-            dockerPassword:
+            DOCKER_PASSWORD:
                 required: true
 jobs:
     build-php:
@@ -22,8 +22,8 @@ jobs:
             -   name: Setup build
                 uses: ./.github/actions/setup-build
                 with:
-                    docker-user: ${{ secrets.dockerUser }}
-                    docker-password: ${{ secrets.dockerPassword }}
+                    docker-user: ${{ secrets.DOCKER_USER }}
+                    docker-password: ${{ secrets.DOCKER_PASSWORD }}
             -   name: Build auth-php and push
                 uses: docker/build-push-action@v6
                 with:
@@ -41,8 +41,8 @@ jobs:
             -   name: Setup build
                 uses: ./.github/actions/setup-build
                 with:
-                    docker-user: ${{ secrets.dockerUser }}
-                    docker-password: ${{ secrets.dockerPassword }}
+                    docker-user: ${{ secrets.DOCKER_USER }}
+                    docker-password: ${{ secrets.DOCKER_PASSWORD }}
             -   name: Build auth-php and push
                 uses: docker/build-push-action@v6
                 with:
@@ -60,8 +60,8 @@ jobs:
             -   name: Setup build
                 uses: ./.github/actions/setup-build
                 with:
-                    docker-user: ${{ secrets.dockerUser }}
-                    docker-password: ${{ secrets.dockerPassword }}
+                    docker-user: ${{ secrets.DOCKER_USER }}
+                    docker-password: ${{ secrets.DOCKER_PASSWORD }}
             -   name: Build auth-php and push
                 uses: docker/build-push-action@v6
                 with:

@@ -6,6 +6,9 @@ on:
 jobs:
     test:
          uses: ./.github/workflows/test.yml
+         secrets:
+             DOCKER_USER: ${{ secrets.DOCKER_USER }}
+             DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     build:
         needs: test
         uses: ./.github/workflows/build.yml
@@ -13,8 +16,8 @@ jobs:
             image-tag: dev
             image-php-target: dev
         secrets:
-            dockerUser: ${{ secrets.DOCKER_USER }}
-            dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
+            DOCKER_USER: ${{ secrets.DOCKER_USER }}
+            DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     deploy:
         needs: build
         runs-on: ubuntu-latest
