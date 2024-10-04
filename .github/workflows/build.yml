@@ -14,25 +14,7 @@ on:
             dockerPassword:
                 required: true
 jobs:
-    build-webserver:
-        runs-on: ubuntu-latest
-        steps:
-            -   name: Checkout
-                uses: actions/checkout@v4
-            -   name: Setup build
-                uses: ./.github/actions/setup-build
-                with:
-                    docker-user: ${{ secrets.dockerUser }}
-                    docker-password: ${{ secrets.dockerPassword }}
-            -   name: Build auth-php and push
-                uses: docker/build-push-action@v6
-                with:
-                    context: .
-                    push: true
-                    file: docker/nginx/Dockerfile
-                    tags: dzhuryn/ticketing-auth-webserver:${{ inputs.image-tag }}
     build-php:
-        needs: build-webserver
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout
@@ -50,8 +32,27 @@ jobs:
                     target: ${{ inputs.image-php-target }}
                     file: docker/php/Dockerfile
                     tags: dzhuryn/ticketing-auth-php:${{ inputs.image-tag }}
-    build-jobber:
+    build-webserver:
         needs: build-php
+        runs-on: ubuntu-latest
+        steps:
+            -   name: Checkout
+                uses: actions/checkout@v4
+            -   name: Setup build
+                uses: ./.github/actions/setup-build
+                with:
+                    docker-user: ${{ secrets.dockerUser }}
+                    docker-password: ${{ secrets.dockerPassword }}
+            -   name: Build auth-php and push
+                uses: docker/build-push-action@v6
+                with:
+                    context: .
+                    push: true
+                    file: docker/nginx/Dockerfile
+                    tags: dzhuryn/ticketing-auth-webserver:${{ inputs.image-tag }}
+                    build-args: PHP_CONTAINER=dzhuryn/ticketing-auth-php:${{ inputs.image-tag }}
+    build-jobber:
+        needs: build-webserver
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout

@@ -4,7 +4,10 @@ on:
         branches:
             - main
 jobs:
+    test:
+        uses: ./.github/workflows/test.yml
     discover-tag:
+        needs: test
         runs-on: ubuntu-latest
         steps:
             -   name: Checkout

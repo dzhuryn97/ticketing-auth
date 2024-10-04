@@ -4,16 +4,19 @@ on:
         branches:
             - dev
 jobs:
-#    build:
-#        uses: ./.github/workflows/build.yml
-#        with:
-#            image-tag: dev
-#            image-php-target: dev
-#        secrets:
-#            dockerUser: ${{ secrets.DOCKER_USER }}
-#            dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
+#    test:
+#         uses: ./.github/workflows/test.yml
+    build:
+#        needs: test
+        uses: ./.github/workflows/build.yml
+        with:
+            image-tag: dev
+            image-php-target: dev
+        secrets:
+            dockerUser: ${{ secrets.DOCKER_USER }}
+            dockerPassword: ${{ secrets.DOCKER_PASSWORD }}
     deploy:
-#        needs: build
+        needs: build
         runs-on: ubuntu-latest
         steps:
             -   name: ssh key passphrase

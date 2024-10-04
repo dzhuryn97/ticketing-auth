@@ -54,6 +54,6 @@ jobs:
                        bin/console doctrine:database:create --if-not-exists;
                        bin/console doctrine:migrations:migrate --no-interaction;
                        bin/console doctrine:fixtures:load --no-interaction;
-                        bin/console lexik:jwt:generate-keypair --no-interaction --env=test;
+                       bin/console lexik:jwt:generate-keypair --no-interaction --env=test;
                        composer run test-integration;
                        '
