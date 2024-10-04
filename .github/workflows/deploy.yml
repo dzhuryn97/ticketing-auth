@@ -4,10 +4,10 @@ on:
         branches:
             - dev
 jobs:
-#    test:
-#         uses: ./.github/workflows/test.yml
+    test:
+         uses: ./.github/workflows/test.yml
     build:
-#        needs: test
+        needs: test
         uses: ./.github/workflows/build.yml
         with:
             image-tag: dev
@@ -27,11 +27,10 @@ jobs:
                     key: ${{ secrets.SERVER_KEY }}
                     debug: true
                     script: |
-                        cd /var/www/ticketing
+                        cd /var/www/dev.ticketing
                         docker image pull dzhuryn/ticketing-auth-webserver:dev
                         docker image pull dzhuryn/ticketing-auth-php:dev
                         docker image pull dzhuryn/ticketing-auth-jobber:dev
                         docker compose up -d --force-recreate
-
                         docker compose exec auth_php bin/console doctrine:migrations:migrate --no-interaction
                         docker compose exec auth_php bin/console doctrine:fixtures:load --no-interaction
