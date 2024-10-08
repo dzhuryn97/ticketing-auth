@@ -43,7 +43,7 @@ jobs:
                 with:
                     docker-user: ${{ secrets.DOCKER_USER }}
                     docker-password: ${{ secrets.DOCKER_PASSWORD }}
-            -   name: Build auth-php and push
+            -   name: Build auth-webserver and push
                 uses: docker/build-push-action@v6
                 with:
                     context: .
@@ -62,7 +62,7 @@ jobs:
                 with:
                     docker-user: ${{ secrets.DOCKER_USER }}
                     docker-password: ${{ secrets.DOCKER_PASSWORD }}
-            -   name: Build auth-php and push
+            -   name: Build auth-jobber and push
                 uses: docker/build-push-action@v6
                 with:
                     context: .

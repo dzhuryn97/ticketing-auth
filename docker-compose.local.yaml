@@ -1,0 +1,39 @@
+version: '3.5'
+
+services:
+    auth_php:
+        build:
+            context: ./
+            dockerfile: ./docker/php/Dockerfile
+            target: dev
+        restart: unless-stopped
+        volumes:
+            - ./:/app
+            - ./docker/php/php.ini:/usr/local/etc/php/php.ini
+            - ./docker/php/www.conf:/usr/local/etc/php/www.conf
+    auth_nginx:
+        build:
+            context: ./
+            dockerfile: ./docker/nginx/Dockerfile
+        restart: unless-stopped
+        environment:
+            PHP_FPM_URI: 'auth_php:9000'
+        volumes:
+            - ./:/app
+            - ./docker/nginx/templates:/etc/nginx/templates
+        depends_on:
+            - auth_php
+
+    auth_jobber:
+        build:
+            context: ./
+            dockerfile: ./docker/jobber/Dockerfile
+        restart: unless-stopped
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+            - ./docker/jobber/supervisord.conf:/etc/supervisor/supervisord.conf:ro
+            - ./docker/jobber/conf.d/:/etc/supervisor/conf.d/:ro
+        depends_on:
+            - auth_php
+        environment:
+            PROJECT_PREFIX: ${COMPOSE_PROJECT_NAME}

@@ -46,5 +46,7 @@ jobs:
                         cd /var/www/ticketing
                         echo "Tag ${{ needs.discover-tag.outputs.tag }}"
                         sed -i 's/^SERVICE_AUTH_VERSION=.*/SERVICE_AUTH_VERSION=${{ needs.discover-tag.outputs.tag }}/' .env
-                        docker compose up -d
-                        docker compose exec auth_php bin/console doctrine:migrations:migrate --no-interaction
+                        docker-compose pull
+                        docker-compose down gateway
+                        docker-compose up -d
+                        docker-compose exec auth_php bin/console doctrine:migrations:migrate --no-interaction

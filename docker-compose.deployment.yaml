@@ -1,0 +1,24 @@
+version: '3.5'
+
+
+services:
+    auth_php:
+        image: dzhuryn/ticketing-auth-php:${SERVICE_AUTH_VERSION}
+        restart: unless-stopped
+        environment:
+            DATABASE_URL: 'postgresql://db_user:db_password@database:5432/db_auth?serverVersion=16&charset=utf8'
+            MESSENGER_DISTRIBUTED_TRANSPORT_DSN: 'amqp://user:pass@rabbitmq:5672/%2f/messages'
+    auth_nginx:
+        image: dzhuryn/ticketing-auth-webserver:${SERVICE_AUTH_VERSION}
+        restart: unless-stopped
+        depends_on:
+            - auth_php
+    auth_jobber:
+        image: dzhuryn/ticketing-auth-jobber:${SERVICE_AUTH_VERSION}
+        restart: unless-stopped
+        volumes:
+            - /var/run/docker.sock:/var/run/docker.sock
+        depends_on:
+            - auth_php
+        environment:
+            PROJECT_PREFIX: ${COMPOSE_PROJECT_NAME}
