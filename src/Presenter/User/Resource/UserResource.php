@@ -31,14 +31,16 @@ use Symfony\Component\Validator\Constraints;
         new Post(
             openapiContext: ['summary' => 'Create User'],
             denormalizationContext: ['groups' => 'user:create', 'user:update'],
+            security: "is_granted('ROLE_USER_CREATE')",
             validationContext: ['groups' => 'user:create', 'user:update'],
             processor: CreateUserProcessor::class
         ),
         new Put(
-            openapiContext: ['summary' => 'Create User'],
+            openapiContext: ['summary' => 'Update User'],
             denormalizationContext: ['groups' => 'user:update'],
+            security: "is_granted('ROLE_USER_UPDATE')",
             validationContext: ['groups' => 'user:update'],
-            processor: UpdateUserProcessor::class
+            processor: UpdateUserProcessor::class,
         ),
     ],
     provider: UserProvider::class

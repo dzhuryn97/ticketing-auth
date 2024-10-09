@@ -25,7 +25,12 @@ class RoleFixtures extends Fixture
             'permissions' => [
                 'ROLE_USER_VIEW',
                 'ROLE_USER_CREATE',
+                'ROLE_USER_UPDATE',
                 'ROLE_USER_FILL_ROLES',
+
+                'ROLE_ROLE_VIEW',
+                'ROLE_ROLE_CREATE',
+                'ROLE_ROLE_UPDATE',
 
                 'ROLE_CATEGORY_VIEW',
                 'ROLE_CATEGORY_CREATE',

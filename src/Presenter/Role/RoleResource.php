@@ -16,16 +16,22 @@ use Symfony\Component\Serializer\Attribute\Groups;
 #[ApiResource(
     shortName: 'Role',
     operations: [
-        new Get(),
-        new GetCollection(),
+        new Get(
+            security: "is_granted('ROLE_ROLE_VIEW')",
+        ),
+        new GetCollection(
+            security: "is_granted('ROLE_ROLE_VIEW')",
+        ),
         new Post(
-            processor: CreateRoleProcessor::class,
             denormalizationContext: [
                 'groups' => ['role:create'],
-            ]
+            ],
+            security: "is_granted('ROLE_ROLE_CREATE')",
+            processor: CreateRoleProcessor::class,
         ),
         new Put(
-            processor: UpdateRoleProcessor::class
+            security: "is_granted('ROLE_ROLE_UPDATE')",
+            processor: UpdateRoleProcessor::class,
         ),
     ],
     normalizationContext: [
