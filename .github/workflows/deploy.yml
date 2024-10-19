@@ -6,23 +6,22 @@ on:
 env:
     PROJECT_FOLDER: /var/www/dev.ticketing
 jobs:
-
-#    test:
-#         uses: ./.github/workflows/test.yml
-#         secrets:
-#             DOCKER_USER: ${{ secrets.DOCKER_USER }}
-#             DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
-#    build:
-#        needs: test
-#        uses: ./.github/workflows/build.yml
-#        with:
-#            image-tag: dev
-#            image-php-target: dev
-#        secrets:
-#            DOCKER_USER: ${{ secrets.DOCKER_USER }}
-#            DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    test:
+         uses: ./.github/workflows/test.yml
+         secrets:
+             DOCKER_USER: ${{ secrets.DOCKER_USER }}
+             DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+    build:
+        needs: test
+        uses: ./.github/workflows/build.yml
+        with:
+            image-tag: dev
+            image-php-target: dev
+        secrets:
+            DOCKER_USER: ${{ secrets.DOCKER_USER }}
+            DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
     deploy:
-#        needs: build
+        needs: build
         runs-on: ubuntu-latest
         steps:
             -   uses: actions/checkout@v4
