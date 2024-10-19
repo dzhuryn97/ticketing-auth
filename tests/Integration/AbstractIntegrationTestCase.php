@@ -5,6 +5,7 @@ namespace App\Tests\Integration;
 use ApiPlatform\Symfony\Bundle\Test\ApiTestCase;
 use ApiPlatform\Symfony\Bundle\Test\Client;
 use App\Presenter\DataFixtures\UserFixtures;
+use Doctrine\ORM\EntityManagerInterface;
 use Faker\Factory;
 use Faker\Generator;
 use Symfony\Component\DependencyInjection\Container;
@@ -15,6 +16,7 @@ abstract class AbstractIntegrationTestCase extends ApiTestCase
     protected Generator $faker;
     protected CommandBusInterface $commandBus;
     protected Container $container;
+    protected EntityManagerInterface $em;
 
     protected function setUp(): void
     {
@@ -23,6 +25,7 @@ abstract class AbstractIntegrationTestCase extends ApiTestCase
 
         $this->faker = Factory::create();
         $this->commandBus = $this->container->get(CommandBusInterface::class);
+        $this->em = $this->container->get(EntityManagerInterface::class);
 
         parent::setUp();
     }
@@ -59,5 +62,13 @@ abstract class AbstractIntegrationTestCase extends ApiTestCase
         $content = $response->toArray();
 
         return $content['token'];
+    }
+
+    protected function assertKeysExistAndNotEmpty(array $data, array $keys): void
+    {
+        foreach ($keys as $key) {
+            $this->assertArrayHasKey($key, $data, sprintf('Key "%s" is missing from the response.', $key));
+            $this->assertNotEmpty($data[$key], sprintf('Value for key "%s" is empty.', $key));
+        }
     }
 }

@@ -1,6 +1,5 @@
 version: '3.5'
 
-
 services:
     auth_php:
         image: dzhuryn/ticketing-auth-php:${SERVICE_AUTH_VERSION}

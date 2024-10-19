@@ -44,7 +44,7 @@ class RoleFixtures extends Fixture
 
                 'ROLE_TICKET_TYPE_VIEW',
                 'ROLE_TICKET_TYPE_CREATE',
-                'ROLE_TICKET_TYPE_UPDATE',
+                'ROLE_TICKET_TYPE_CHANGE_PRICE',
 
                 'ROLE_ORDER_VIEW',
 

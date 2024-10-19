@@ -15,6 +15,9 @@ services:
         build:
             context: ./
             dockerfile: ./docker/nginx/Dockerfile
+            target: build
+            args:
+                PHP_CONTAINER: 'blank'
         restart: unless-stopped
         environment:
             PHP_FPM_URI: 'auth_php:9000'

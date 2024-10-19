@@ -1,12 +1,13 @@
 ARG PHP_CONTAINER
-FROM ${PHP_CONTAINER} as build
-
-FROM nginx:1.19-alpine
+FROM nginx:1.19-alpine AS build
 
 COPY docker/nginx/conf.d/default.conf /etc/nginx/conf.d/default.conf
 COPY docker/nginx/snippets/fastcgi-php.conf /etc/nginx/snippets/fastcgi-php.conf
 
 WORKDIR /app
-COPY ./public ./public
 
-COPY --from=build /app/public/bundles /app/public/bundles
+FROM ${PHP_CONTAINER} AS bundles
+
+FROM build AS deployment
+COPY ./public ./public
+COPY --from=bundles /app/public/bundles /app/public/bundles
