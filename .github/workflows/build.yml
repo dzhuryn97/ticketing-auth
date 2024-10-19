@@ -50,6 +50,7 @@ jobs:
                     push: true
                     file: docker/nginx/Dockerfile
                     tags: dzhuryn/ticketing-auth-webserver:${{ inputs.image-tag }}
+                    target: deployment
                     build-args: PHP_CONTAINER=dzhuryn/ticketing-auth-php:${{ inputs.image-tag }}
     build-jobber:
         needs: build-webserver
