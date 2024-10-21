@@ -29,6 +29,7 @@
         "symfony/flex": "^2",
         "symfony/framework-bundle": "7.1.*",
         "symfony/messenger": "7.1.*",
+        "symfony/monolog-bundle": "^3.10",
         "symfony/property-access": "7.1.*",
         "symfony/property-info": "7.1.*",
         "symfony/runtime": "7.1.*",
@@ -96,6 +97,7 @@
         }
     },
     "require-dev": {
+        "dama/doctrine-test-bundle": "^8.2",
         "friendsofphp/php-cs-fixer": "*",
         "justinrainbow/json-schema": "^6.0",
         "overtrue/phplint": "^9.4",
